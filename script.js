@@ -1,8 +1,14 @@
 // Model
 
+const app = document.getElementById("app");
+const desc = document.getElementById("description");
+const person = document.getElementById("person");
+const date = document.getElementById("date-input");
+
 let tasks = [];
 
 // View
+
 const table = document.getElementById("table");
 
 function updateView() {
@@ -33,17 +39,13 @@ function updateView() {
             </tr>
         `;
     }
-        
+
     table.innerHTML = htmlString;
 }
 
 updateView();
 
 // Controller
-const app = document.getElementById("app");
-const desc = document.getElementById("description");
-const person = document.getElementById("person");
-const date = document.getElementById("date-input");
 
 function newTask() {
     if (desc.value === "") return;
@@ -63,18 +65,34 @@ function newTask() {
 function createTaskHTML(i) {
     let checkbox = tasks[i].isDone ? 'checked="checked"' : "";
     let checkedClass = tasks[i].isDone ? 'class="checked"' : "";
-    let dateString = tasks[i].deadline === null ? "N/A" : tasks[i].deadline.toLocaleDateString();
-    if (tasks[i].editMode) return /*html*/ `
+    let dateString =
+        tasks[i].deadline === null
+            ? "N/A"
+            : tasks[i].deadline.toLocaleDateString();
+    if (tasks[i].editMode)
+        return /*html*/ `
         <tr>
-            <td ${checkedClass}><input class="edit" type="text" id="editDesc${i}" value="${tasks[i].description}"></td>
+            <td ${checkedClass}><input class="edit" type="text" id="editDesc${i}" value="${
+            tasks[i].description
+        }"></td>
             <td class="less-padding ${tasks[i].isDone ? "checked" : ""}">
-                <input class="date-edit inside" type="date" id="editDate${i}" value="${tasks[i].deadline === null ? "" : tasks[i].deadline.toISOString().substr(0, 10)}">
+                <input class="date-edit inside" type="date" id="editDate${i}" value="${
+            tasks[i].deadline === null
+                ? ""
+                : tasks[i].deadline.toISOString().substr(0, 10)
+        }">
             </td>
-            <td ${checkedClass}><input class="edit short" type="text" id="editPerson${i}" value="${tasks[i].assignedTo}"></td>
+            <td ${checkedClass}><input class="edit short" type="text" id="editPerson${i}" value="${
+            tasks[i].assignedTo
+        }"></td>
             <td class="center-flex ${tasks[i].isDone ? "checked" : ""}">
                 <input id="checkbox${i}" type="checkbox" onchange="toggleDone(this, ${i})" ${checkbox}>
                 <div class="completed-date">
-                    ${tasks[i].isDone ? tasks[i].completedDate.toLocaleDateString() : "N/A"}
+                    ${
+                        tasks[i].isDone
+                            ? tasks[i].completedDate.toLocaleDateString()
+                            : "N/A"
+                    }
                 </div>
             </td>
             <td ${checkedClass}>
@@ -91,7 +109,11 @@ function createTaskHTML(i) {
             <td class="center-flex ${tasks[i].isDone ? "checked" : ""}">
                 <input id="checkbox${i}" type="checkbox" onchange="toggleDone(this, ${i})" ${checkbox}>
                 <div class="completed-date">
-                    ${tasks[i].isDone ? tasks[i].completedDate.toLocaleDateString() : "N/A"}
+                    ${
+                        tasks[i].isDone
+                            ? tasks[i].completedDate.toLocaleDateString()
+                            : "N/A"
+                    }
                 </div>
             </td>
             <td ${checkedClass}>
@@ -133,8 +155,4 @@ function deleteTask(i) {
     tasks.splice(i, 1);
     updateView();
     saveDataToCookie();
-}
-
-function saveDataToCookie() {
-    document.cookie = `tasks=${JSON.stringify(tasks)}`;
 }
